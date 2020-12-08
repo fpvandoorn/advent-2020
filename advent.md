@@ -1,11 +1,11 @@
 ```mathematica
-1 
+# 1 
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["1.txt"];
 {p1a, p1b} = 
  Times @@@ 
   Select[Subsets[ToExpression@StringSplit@str, 3], Total@# == 2020 &]
-2
+# 2
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["2.txt"];
 data = MapAt[ToExpression, #, {{1}, {2}}] & /@ 
@@ -13,7 +13,7 @@ data = MapAt[ToExpression, #, {{1}, {2}}] & /@
 p2a = Count[data, _?(#1 <= StringCount[#4, #3] <= #2 & @@ # &)]
 p2b = Count[
   data, _?(Count[StringTake[#4, {{#1}, {#2}}], #3] == 1 & @@ # &)]
-3
+# 3
 SetDirectory["D:\\projects\\advent-2020\\input\\input"];
 str = Import["3.txt"];
 trees = Map[If[# == "#", 1, 0] &, #, {2}] &[
@@ -27,7 +27,7 @@ counttrees[right_, down_] := Module[{x = 1,
 p3a = counttrees[3, 1]
 p3b = counttrees[1, 1] counttrees[3, 1] counttrees[5, 1] counttrees[7,
     1] counttrees[1, 2]
-4
+# 4
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["4.txt"];
 mandatory = Sort@{"eyr", "hgt", "pid", "ecl", "byr", "hcl", "iyr"};
@@ -52,7 +52,7 @@ check[pass_] :=
        StringDrop[#, 4]) &@
   Select[Sort@StringSplit[pass], ! StringMatchQ[#, "cid" ~~ ___] &]
 p4b = Count[StringSplit[str, "\n\n"], _?(check[#] &)]
-5
+# 5
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["5.txt"];
 seats = FromDigits[#, 
@@ -60,7 +60,7 @@ seats = FromDigits[#,
      "F" -> 0, "R" -> 1}); p5a = Max[seats]
 min = Min[seats];
 Complement[Range[min, p5a], seats]
-6
+# 6
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["6.txt"];
 p6a = Total[
@@ -70,7 +70,7 @@ p6a = Total[
 p6b = Total[
   Length /@ (Intersection @@@ 
      Characters@StringSplit@StringSplit[str, "\n\n"])]
-7
+# 7
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["7.txt"];
 data1 = StringSplit[
@@ -102,7 +102,7 @@ dictb = Rule @@@ data;
 count[bag_] := 
  count[bag] = Total[#1 (count[#2] + 1) & @@@ (bag /. dictb)]
 p7b = count@start
-8
+# 8
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["8.txt"];
 instr = MapAt[ToExpression, #, 2] & /@ 
@@ -146,24 +146,24 @@ While[i <= n && ! MemberQ[visited, i],
    i += If[in[[1]] === "jmp", in[[2]], 1]];
   ];
 If[i == n + 1, p8b = acc, Print["No flippable instruction found"]]
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-output
+# 9
+# 10
+# 11
+# 12
+# 13
+# 14
+# 15
+# 16
+# 17
+# 18
+# 19
+# 20
+# 21
+# 22
+# 23
+# 24
+# 25
+# output
 SetDirectory["D:\\projects\\advent-2020"];
 txt = First@
    FrontEndExecute[
