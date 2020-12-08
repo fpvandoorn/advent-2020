@@ -168,7 +168,7 @@ SetDirectory["D:\\projects\\advent-2020"];
 txt = First@
    FrontEndExecute[
     FrontEnd`ExportPacket[NotebookGet@InputNotebook[], "InputText"]];
-txt = "```mathematica\n" <> StringReplace[txt, "\r\n" -> "\n"] <> 
-   "\n```\n";
+txt = "```mathematica\n" <> 
+   StringReplace[txt, {"\r\n" -> "\n", "\n#" -> "\n\n#"}] <> "\n```\n";
 Export["advent.md", txt, "Text"];
 ```
