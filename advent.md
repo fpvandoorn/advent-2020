@@ -1,12 +1,12 @@
 ```mathematica
-# 1 
+(* 1 *) 
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["1.txt"];
 {p1a, p1b} = 
  Times @@@ 
   Select[Subsets[ToExpression@StringSplit@str, 3], Total@# == 2020 &]
 
-# 2
+(* 2 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["2.txt"];
 data = MapAt[ToExpression, #, {{1}, {2}}] & /@ 
@@ -15,7 +15,7 @@ p2a = Count[data, _?(#1 <= StringCount[#4, #3] <= #2 & @@ # &)]
 p2b = Count[
   data, _?(Count[StringTake[#4, {{#1}, {#2}}], #3] == 1 & @@ # &)]
 
-# 3
+(* 3 *)
 SetDirectory["D:\\projects\\advent-2020\\input\\input"];
 str = Import["3.txt"];
 trees = Map[If[# == "#", 1, 0] &, #, {2}] &[
@@ -30,7 +30,7 @@ p3a = counttrees[3, 1]
 p3b = counttrees[1, 1] counttrees[3, 1] counttrees[5, 1] counttrees[7,
     1] counttrees[1, 2]
 
-# 4
+(* 4 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["4.txt"];
 mandatory = Sort@{"eyr", "hgt", "pid", "ecl", "byr", "hcl", "iyr"};
@@ -56,7 +56,7 @@ check[pass_] :=
   Select[Sort@StringSplit[pass], ! StringMatchQ[#, "cid" ~~ ___] &]
 p4b = Count[StringSplit[str, "\n\n"], _?(check[#] &)]
 
-# 5
+(* 5 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["5.txt"];
 seats = FromDigits[#, 
@@ -65,7 +65,7 @@ seats = FromDigits[#,
 min = Min[seats];
 Complement[Range[min, p5a], seats]
 
-# 6
+(* 6 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["6.txt"];
 p6a = Total[
@@ -76,7 +76,7 @@ p6b = Total[
   Length /@ (Intersection @@@ 
      Characters@StringSplit@StringSplit[str, "\n\n"])]
 
-# 7
+(* 7 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["7.txt"];
 data1 = StringSplit[
@@ -109,7 +109,7 @@ count[bag_] :=
  count[bag] = Total[#1 (count[#2] + 1) & @@@ (bag /. dictb)]
 p7b = count@start
 
-# 8
+(* 8 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
 str = Import["8.txt"];
 instr = MapAt[ToExpression, #, 2] & /@ 
@@ -154,47 +154,47 @@ While[i <= n && ! MemberQ[visited, i],
   ];
 If[i == n + 1, p8b = acc, Print["No flippable instruction found"]]
 
-# 9
+(* 9 *)
 
-# 10
+(* 10 *)
 
-# 11
+(* 11 *)
 
-# 12
+(* 12 *)
 
-# 13
+(* 13 *)
 
-# 14
+(* 14 *)
 
-# 15
+(* 15 *)
 
-# 16
+(* 16 *)
 
-# 17
+(* 17 *)
 
-# 18
+(* 18 *)
 
-# 19
+(* 19 *)
 
-# 20
+(* 20 *)
 
-# 21
+(* 21 *)
 
-# 22
+(* 22 *)
 
-# 23
+(* 23 *)
 
-# 24
+(* 24 *)
 
-# 25
+(* 25 *)
 
-# output
+(* output *)
 SetDirectory["D:\\projects\\advent-2020"];
 txt = First@
    FrontEndExecute[
     FrontEnd`ExportPacket[NotebookGet@InputNotebook[], "InputText"]];
 txt = "```mathematica\n" <> 
    StringReplace[StringReplace[txt, "\r\n" -> "\n"], 
-    "\n#" -> "\n\n#"] <> "\n```\n";
+    "\n(*" -> "\n\n(*"] <> "\n```\n";
 Export["advent.md", txt, "Text"];
 ```
