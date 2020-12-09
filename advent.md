@@ -155,6 +155,24 @@ While[i <= n && ! MemberQ[visited, i],
 If[i == n + 1, p8b = acc, Print["No flippable instruction found"]]
 
 (* 9 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["9.txt"];
+n = 25;
+list = ToExpression /@ StringSplit@str;
+For[i = n + 1, i <= Length@list, i++,
+ x = list[[i]];
+ l = list[[i - n ;; i - 1]];
+ If[Intersection[l, x - l] === {}, Break[]]]
+p9a = list[[i]]
+sums = {};
+For[i = 1, i <= Length@list, i++,
+ x = list[[i]];
+ sums = {#1 + x, Min[#2, x], Max[#3, x]} & @@@ sums;
+ p = Position[sums[[All, 1]], p9a];
+ If[p =!= {}, p9b = sums[[p[[1, 1]], 2]] + sums[[p[[1, 1]], 3]]];
+ AppendTo[sums, {x, x, x}]]
+p9b
+4830226
 
 (* 10 *)
 
