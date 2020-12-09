@@ -172,7 +172,6 @@ For[i = 1, i <= Length@list, i++,
  If[p =!= {}, p9b = sums[[p[[1, 1]], 2]] + sums[[p[[1, 1]], 3]]];
  AppendTo[sums, {x, x, x}]]
 p9b
-4830226
 
 (* 10 *)
 
