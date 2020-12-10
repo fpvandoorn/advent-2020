@@ -174,6 +174,19 @@ For[i = 1, i <= Length@list, i++,
 p9b
 
 (* 10 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["10.txt"];
+list = ToExpression@StringSplit@str;
+dict = Rule @@@ Tally@Differences@Union[list, {0}];
+p10a = (1 /. dict) ((3 /. dict) + 1)
+slist = Sort@list;
+temp = {{0, 1}};
+For[i = 1, i <= Length@list, i++,
+  value = slist[[i]];
+  temp = Select[temp, #[[1]] + 3 >= value &];
+  AppendTo[temp, {value, Total@temp[[All, 2]]}]
+  ];
+p10b = temp[[-1, 2]]
 
 (* 11 *)
 
