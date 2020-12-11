@@ -172,6 +172,7 @@ For[i = 1, i <= Length@list, i++,
  If[p =!= {}, p9b = sums[[p[[1, 1]], 2]] + sums[[p[[1, 1]], 3]]];
  AppendTo[sums, {x, x, x}]]
 p9b
+p9b
 
 (* 10 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
@@ -189,6 +190,39 @@ For[i = 1, i <= Length@list, i++,
 p10b = temp[[-1, 2]]
 
 (* 11 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["11.txt"];
+data = Characters /@ StringSplit[str];
+n = Length[data];
+m = Length[data[[1]]];
+
+cnt[data_] := (Count[
+    Flatten[data[[Max[#2[[1]] - 1, 1] ;; Min[#2[[1]] + 1, n], 
+      Max[#2[[2]] - 1, 1] ;; Min[#2[[2]] + 1, m]]]], "#"] &)
+next[data_] := 
+  MapIndexed[
+   If[#1 === "L" && cnt[data][##] == 0, "#", 
+     If[#1 === "#" && cnt[data][##] >= 5, "L", #1]] &, data, {2}];
+prev = data;
+nxt = next[prev];
+While[nxt =!= prev, prev = nxt; nxt = next[prev]];
+p11a = Count[Flatten@prev, "#"]
+directions = 
+ Select[Join @@ 
+   Table[{ii, jj}, {ii, -1, 1}, {jj, -1, 1}], # =!= {0, 0} &]
+cntb[data_] := (Count[(v \[Function] (k = #2 + v; 
+        While[1 <= k[[1]] <= n && 1 <= k[[2]] <= m, 
+         If[Extract[data, k] === "#", Return[1], 
+          If[Extract[data, k] === "L", Return[0], k += v]]]; 
+        Return[0])) /@ directions, Return[1]] &)
+nextb[data_] := 
+  MapIndexed[
+   If[#1 === "L" && cntb[data][##] == 0, "#", 
+     If[#1 === "#" && cntb[data][##] >= 5, "L", #1]] &, data, {2}];
+prev = data;
+nxt = nextb[prev];
+While[nxt =!= prev, prev = nxt; nxt = nextb[prev]];
+p11b = Count[Flatten@prev, "#"]
 
 (* 12 *)
 
