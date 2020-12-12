@@ -225,6 +225,34 @@ While[nxt =!= prev, prev = nxt; nxt = nextb[prev]];
 p11b = Count[Flatten@prev, "#"]
 
 (* 12 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["12.txt"];
+data = {StringTake[#, 1], ToExpression@StringDrop[#, 1]} & /@ 
+   StringSplit@str;
+dirs = {0 -> {1, 0}, 90 -> {0, 1}, 180 -> {-1, 0}, 270 -> {0, -1}, 
+   "E" -> {1, 0}, "N" -> {0, 1}, "W" -> {-1, 0}, "S" -> {0, -1}};
+dir = 0;
+pos = {0, 0};
+For[i = 1, i <= Length@data, i++,
+ instr = data[[i]];
+ If[instr[[1]] == "L", dir += instr[[2]],
+  If[instr[[1]] == "R", dir -= instr[[2]],
+   pos += ((instr[[1]] /. {"F" -> Mod[dir, 360]}) /. dirs)*instr[[2]]
+   ]]]
+p12a = Abs[pos[[1]]] + Abs[pos[[2]]]
+dirs = {0 -> {1, 0}, 90 -> {0, 1}, 180 -> {-1, 0}, 270 -> {0, -1}, 
+   "E" -> {1, 0}, "N" -> {0, 1}, "W" -> {-1, 0}, "S" -> {0, -1}};
+shippos = {0, 0};
+wppos = {10, 1};(*relative to the ship*)
+For[i = 1, i <= Length@data, i++,
+ instr = data[[i]];
+ If[instr[[1]] == "L", wppos = RotationMatrix[instr[[2]] Degree].wppos,
+  If[instr[[1]] == "R", 
+   wppos = RotationMatrix[-instr[[2]] Degree].wppos,
+   If[instr[[1]] == "F", shippos += wppos*instr[[2]],
+    wppos += (instr[[1]] /. dirs)*instr[[2]]
+    ]]]]
+p12b = Abs[shippos[[1]]] + Abs[shippos[[2]]]
 
 (* 13 *)
 
