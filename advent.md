@@ -255,6 +255,19 @@ For[i = 1, i <= Length@data, i++,
 p12b = Abs[shippos[[1]]] + Abs[shippos[[2]]]
 
 (* 13 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["13.txt"];
+data = StringSplit[str, {"\n", ","}];
+data2 = ToExpression /@ Select[data, # =!= "x" &];
+time = data2[[1]];
+data3 = Rest@data2;
+waittimes = Mod[-time, #] & /@ data3;
+leastpos = Ordering[waittimes, 1][[1]];
+p13a = Min[waittimes]*data3[[leastpos]]
+datab = ToExpression@
+   Select[MapIndexed[{#, 1 - #2[[1]]} &, 
+     data[[2 ;; -1]]], #[[1]] =!= "x" &];
+p13b = ChineseRemainder @@ Reverse@Transpose@datab
 
 (* 14 *)
 
