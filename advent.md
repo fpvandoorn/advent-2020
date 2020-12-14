@@ -270,6 +270,37 @@ datab = ToExpression@
 p13b = ChineseRemainder @@ Reverse@Transpose@datab
 
 (* 14 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["14.txt"];
+data = StringSplit[
+   StringSplit[str, "\n"], {"mem[", "] = ", "mask = "}];
+dataWithInstructionsDeleted = 
+  Reverse@DeleteDuplicates[Reverse@data, 
+    First[#1] == First[#2] &];(*delete duplicate writes*)
+UniqueInstructions = 
+  Join @@ ((a \[Function] {#[[1]], ToExpression@a}) /@ Rest@# & /@ 
+     Split[dataWithInstructionsDeleted, Length@#2 == 2 &]);
+p14a = (inf \[Function] 
+     FromDigits[
+      If[#1 == "X", #2, ToExpression@#1] & @@@ 
+       Transpose@{Characters@inf[[1, 1]], 
+         PadLeft[IntegerDigits[inf[[2, 2]], 2], 36]}, 2]) /@ 
+   UniqueInstructions // Total
+InstructionsB = 
+  Join @@ ((a \[Function] {#[[1]], ToExpression@a}) /@ Rest@# & /@ 
+     Split[data, Length@#2 == 2 &]);
+AllMemoryWrites = 
+  Join @@ ((inf \[Function] {#, 
+          inf[[2, 2]]} & /@ (FromDigits[
+           If[#1 == "1", 1, If[#1 == "X", 0, #2]] & @@@ 
+            Transpose@{Characters@inf[[1, 1]], 
+              PadLeft[IntegerDigits[inf[[2, 1]], 2], 36]}, 
+           2] + (Total /@ 
+            Subsets[
+             2^(36 - StringPosition[inf[[1, 1]], "X"][[All, 1]])]))) /@
+      InstructionsB);
+p14b = Total@
+  DeleteDuplicatesBy[Reverse[AllMemoryWrites], First][[All, 2]]
 
 (* 15 *)
 
