@@ -306,18 +306,13 @@ p14b = Total@
 str = "20,9,11,0,1,2";
 data = Reverse@ToExpression@StringSplit[str, ","];
 n = 2020;
-assoc
-<|20 -> 1, 9 -> 2, 11 -> 3, 0 -> 4, 1 -> 5|>
-Append[assoc, 20 -> 3]
 it = n - Length@data;
 data2 = data;
 For[i = 1, i <= it, i++,
   PrependTo[data2, 
    If[MemberQ[Rest@data2, data2[[1]]], 
     Position[data2, data2[[1]], 1, 2][[-1, 1]] - 1, 0]]];
-data2[[1]]
-1111
-
+p15a = data2[[1]]
 n = 30000000;
 assoc = Association@MapIndexed[#1 -> #2[[1]] &, Most@Reverse@data];
 value = First@data;
@@ -325,9 +320,7 @@ Timing@For[i = Length@data, i < n, i++,
   p = assoc[value];
   AppendTo[assoc, {value -> i}];
   value = If[MatchQ[p, Missing[_, _]], 0, i - p]]
-value
-{418.156, Null}
-48568
+p15b = value
 
 (* 16 *)
 SetDirectory["D:\\projects\\advent-2020\\input"];
