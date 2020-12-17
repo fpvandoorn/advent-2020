@@ -363,6 +363,51 @@ myticket = ToExpression@Rest@StringSplit[data[[2]], {"\n", ","}];
 p16b = Times @@ Extract[myticket, deppos]
 
 (* 17 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["17.txt"];
+data = Characters /@ StringSplit[str, "\n"];
+n = 6;
+h = Length@data;
+w = Length@data[[1]];
+data2 = PadLeft[
+   PadRight[{data}, {1 + n, h + n, w + n}, "."], {1 + 2 n, h + 2 n, 
+    w + 2 n}, "."];
+directions = 
+  Select[Flatten[
+    Table[{ii, jj, kk}, {ii, -1, 1}, {jj, -1, 1}, {kk, -1, 1}], 
+    2], # =!= {0, 0, 0} &];
+cnt[data_] := (Count[
+    Flatten[data[[Max[#2[[1]] - 1, 1] ;; Min[#2[[1]] + 1, 1 + 2 n], 
+      Max[#2[[2]] - 1, 1] ;; Min[#2[[2]] + 1, h + 2 n], 
+      Max[#2[[3]] - 1, 1] ;; Min[#2[[3]] + 1, w + 2 n]]]], "#"] &)
+next[data_] := 
+  MapIndexed[
+   If[#1 === "#" && 3 <= cnt[data][##] <= 4, "#", 
+     If[#1 === "." && cnt[data][##] == 3, "#", "."]] &, data, {3}];
+result = Nest[next, data2, 6];
+p17a = Count[Flatten@result, "#"]
+data = Characters /@ StringSplit[str, "\n"];
+n = 6;
+h = Length@data;
+w = Length@data[[1]];
+data2 = PadLeft[
+   PadRight[{{data}}, {1 + n, 1 + n, h + n, w + n}, "."], {1 + 2 n, 
+    1 + 2 n, h + 2 n, w + 2 n}, "."];
+directions = 
+  Select[Flatten[
+    Table[{ii, jj, kk, ll}, {ii, -1, 1}, {jj, -1, 1}, {kk, -1, 
+      1}, {ll, -1, 1}], 2], # =!= {0, 0, 0, 0} &];
+cnt[data_] := (Count[
+    Flatten[data[[Max[#2[[1]] - 1, 1] ;; Min[#2[[1]] + 1, 1 + 2 n], 
+      Max[#2[[2]] - 1, 1] ;; Min[#2[[2]] + 1, 1 + 2 n], 
+      Max[#2[[3]] - 1, 1] ;; Min[#2[[3]] + 1, h + 2 n], 
+      Max[#2[[4]] - 1, 1] ;; Min[#2[[4]] + 1, w + 2 n]]]], "#"] &)
+next[data_] := 
+  MapIndexed[
+   If[#1 === "#" && 3 <= cnt[data][##] <= 4, "#", 
+     If[#1 === "." && cnt[data][##] == 3, "#", "."]] &, data, {4}];
+result = Nest[next, data2, 6];
+p17b = Count[Flatten@result, "#"]
 
 (* 18 *)
 
