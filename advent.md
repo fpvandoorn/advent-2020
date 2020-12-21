@@ -410,10 +410,143 @@ result = Nest[next, data2, 6];
 p17b = Count[Flatten@result, "#"]
 
 (* 18 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["18.txt"];
+data = StringSplit[StringReplace[str, " " -> ""], "\n"];
+compute := Module[{j = consumeN}, infix[j]]
+consumeN := 
+ Module[{pos}, 
+  If[StringTake[expr, 1] === "(", expr = StringDrop[expr, 1]; compute,
+    j = ToExpression@StringTake[expr, 1]; expr = StringDrop[expr, 1]; 
+   j]]
+infix[j_] := 
+ If[expr === "", j, 
+  Module[{t = StringTake[expr, 1], k}, expr = StringDrop[expr, 1]; 
+   If[t === ")", j, k = consumeN; infix[If[t === "+", j + k, j k]]]]]
+eval := ((expr = #; compute) &)
+p18a = Total[eval /@ data]
+8929569623593
+data2 = StringReplace[#, {"+" -> 
+       "\[CircleTimes]", \!\(TraditionalForm\`"\<*\>" -> "\<\
+\[CirclePlus]\>"\)}] & /@ data;
+p18b = Total[
+  ToExpression[data2] /. {CirclePlus -> Times, CircleTimes -> Plus}]
 
 (* 19 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["19.txt"];
+{rules, msgs} = StringSplit[str, "\n\n"];
+rules2 = Sort[
+    MapAt[ToExpression, #, 1] & /@ 
+     StringSplit[StringSplit[rules, "\n"], ": "]][[All, 2]];
+rules3 = Map[If[# =!= "|", ToExpression@#, #] &, 
+   StringSplit /@ rules2, {2}];
+rules4 = Rest@rules3;
+Clear[interpret]
+interpret[ruleslist_, rule_] := 
+ interpret[ruleslist, rule] = 
+  StringJoin @@ (If[MemberQ[rule, "|"], 
+       Prepend[Append[#, ")"], "("], #] &[
+     If[StringQ@#, #, interpret[ruleslist, ruleslist[[#]]]] & /@ rule])
+regex = RegularExpression@interpret[rules4, rules3[[1]]];
+p19a = Length@Select[StringSplit@msgs, StringMatchQ[#, regex] &]
+n = 7;
+rules5 = ReplacePart[
+   rules4, {8 -> {"(", 42, ")+"}, 
+    11 -> Flatten@
+      Riffle[Array[
+        ConstantArray[42, #]~Join~ConstantArray[31, #] &, {n}], "|"]}];
+regexb = RegularExpression@interpret[rules5, rules3[[1]]];
+p19b = Length@Select[StringSplit@msgs, StringMatchQ[#, regexb] &]
 
 (* 20 *)
+SetDirectory["D:\\projects\\advent-2020\\input"];
+str = Import["20.txt"];
+{numbers, grids} = 
+  Transpose@
+   StringSplit[StringSplit[StringReplace[str, "Tile " -> ""], "\n\n"],
+     ":\n"];
+grids2 = Characters@StringSplit[grids, "\n"];
+numbers2 = ToExpression@numbers;
+sides = Sort[{#, Reverse@#}][[1]] & /@ {#[[All, 1]], #[[All, -1]], #[[
+       1]], #[[-1]]} & /@ grids2;
+sides2 = Flatten[sides, 1];
+pos = {#} & /@ 
+   Select[Tally@
+      Ceiling[Position[sides2, _?(Count[sides2, #] == 1 &)][[All, 1]]/
+        4], #[[2]] == 2 &][[All, 1]];
+p20a = Times @@ Extract[numbers2, pos]
+adj = Position[
+      sides, _?(a \[Function] Length@Intersection[a, #] == 1), {1}, 
+      Heads -> False][[All, 1]] & /@ sides;
+addelement[pos_, nr_] := (AppendTo[table, pos -> nr]; 
+  AppendTo[done, nr])
+table = {};
+done = {};
+addelement[{1, 1}, Position[adj, _?(Length@# == 2 &), 1][[1, 1]]];
+addelement[{1, 2}, adj[[done[[1]], 2]]];
+addelement[{2, 1}, adj[[done[[1]], 1]]];
+width = Sqrt@Length@grids;
+For[i = 2, i <= width, i++,
+  lasttwo = Extract[adj, {#} & /@ table[[{-2, -1}, 2]]];
+  addelement[{i, 2}, Complement[Intersection @@ lasttwo, done][[1]]];
+  addelement[{i + 1, 1}, #] & /@ 
+   Complement[lasttwo[[2]], lasttwo[[1]]]];
+For[j = 3, j <= width, j++,
+ For[i = 1, i <= width, i++,
+  addelement[{i, j}, #] & /@ 
+   Complement[adj[[{i, j - 1} /. table]], done]]]
+
+positions = Normal@SparseArray[table];
+
+MatrixForm[grids3 = MapIndexed[
+    ({i, j} = #2;
+      If[i < width,
+       nr = 
+        Position[
+          
+          sides[[#]], _?(MemberQ[
+              sides[[positions[[i + 1, j]]]], #] &)][[1, 1]];
+       Switch[nr, 1, Reverse@Transpose@#, 2, Transpose@#, 3, 
+          Reverse@#, 4, #] &[grids2[[#]]],
+       nr = 
+        Position[
+          sides[[#]], _?(MemberQ[
+              sides[[positions[[i - 1, j]]]], #] &)][[1, 1]];
+       Switch[nr, 1, Transpose@#, 2, Reverse@Transpose@#, 3, #, 4, 
+          Reverse@#] &[grids2[[#]]]]) &, positions, {2}]];
+
+MatrixForm[grids4 = MapIndexed[
+    ({i, j} = #2;
+      If[j < width,
+       If[
+        MemberQ[Transpose@grids3[[i, j + 1, All, {1, -1}]], #[[
+          All, -1]]], #, Reverse /@ #],
+       If[
+        MemberQ[Transpose@grids3[[i, j - 1, All, {1, -1}]], #[[
+          All, -1]]], Reverse /@ #, #]]) &, grids3, {2}]];
+grids5 = grids4[[All, All, 2 ;; -2, 2 ;; -2]];
+image = ArrayFlatten@grids5;
+monsterstr = "                  # 
+  #    ##    ##    ###
+   #  #  #  #  #  #   ";
+monster = Characters@StringSplit[monsterstr, "\n"];
+mh = Length@monster;
+mw = Length@monster[[1]];
+monster2 = Flatten@monster;
+image = Reverse /@ Reverse@Transpose@ArrayFlatten@grids5;
+matches = {};
+For[i = 1, i + mh - 1 <= Length@image, i++,
+ For[j = 1, j + mw - 1 <= Length@image[[1]], j++,
+  If[And @@ (If[#1 == "#", #2 == "#", True] & @@@ 
+      Transpose[{monster2, 
+        Flatten@image[[i ;; i + mh - 1, j ;; j + mw - 1]]}]),
+   AppendTo[matches, {i, j}]]]]
+image2 = image;
+MapIndexed[({a, i} \[Function] 
+      If[a === "#", image2[[# + i[[1]] - 1, #2 + i[[2]] - 1]] = "O"]),
+     monster, {2}] & @@@ matches;
+p20b = Count[Flatten@image2, "#"]
 
 (* 21 *)
 
